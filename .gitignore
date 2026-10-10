@@ -1,0 +1,21 @@
+# Credenciais, dados reais e arquivos internos
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.sql
+*.dump
+*.backup
+*.log
+node_modules/
+audit/
+upload/
+Auditoria/
+Simunus-admin/
+Revisao_Privada/
+*.zip
+__pycache__/
+.DS_Store

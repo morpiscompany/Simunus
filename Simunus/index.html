@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3 'sha256-MmOcF+2OTpniioOCZIq7Mw9Yx7JqG+qq3drV0IuLWpA='; connect-src 'self' https://*.supabase.co wss://*.supabase.co; img-src 'self' https: data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+    <meta name="referrer" content="no-referrer">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="description" content="SIMUNUS — plataforma de estudos médicos e simulados.">
+    <script>
+        (() => {
+            try {
+                const saved = localStorage.getItem("simulados-medicina-theme");
+                const theme = saved === "escuro" || saved === "claro"
+                    ? saved
+                    : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "escuro" : "claro");
+                document.documentElement.dataset.tema = theme;
+            } catch (_) {}
+        })();
+    </script>
+    <title>SIMUNUS</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <!-- ÚNICA LOGO VISUAL GLOBAL — permanece viva durante toda a navegação. -->
+    <img id="global-simunus-logo" class="global-simunus-logo" src="./assets/simunus-logo-dark.png" data-logo-dark="./assets/simunus-logo-dark.png" data-logo-light="./assets/simunus-logo-light.png" alt="SIMUNUS" aria-hidden="true">
+    <main class="container">
+        <!-- 0. Acesso -->
+        <section id="tela-acesso" class="tela tela-acesso" aria-labelledby="titulo-acesso">
+            <button id="alternar-tema-acesso" class="botao-tema botao-tema-acesso" type="button" aria-label="Ativar modo escuro" aria-pressed="false" title="Modo escuro">
+                <span class="tema-icone" aria-hidden="true"><svg class="lucide lucide-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M20.985 12.486A9 9 0 1 1 11.514 3.015 7 7 0 0 0 20.985 12.486z"></path></svg></span>
+            </button>
+            <div class="acesso-conteudo">
+                <img class="logo-simunus logo-simunus-acesso" src="./assets/simunus-logo-dark.png" data-logo-dark="./assets/simunus-logo-dark.png" data-logo-light="./assets/simunus-logo-light.png" alt="SIMUNUS">
+                <h1 id="titulo-acesso" class="visually-hidden">SIMUNUS</h1>
+                <p id="subtitulo-acesso" class="subtitulo">Acesso à sua plataforma de estudos</p>
+                <form id="formulario-acesso" class="formulario-acesso" novalidate>
+                    <label id="rotulo-email-acesso" for="email-acesso">E-mail</label>
+                    <input id="email-acesso" name="email" type="email" inputmode="email" autocomplete="email" placeholder="seu@email.com" required>
+<label id="rotulo-senha-acesso" for="senha-acesso">Senha</label>
+<div class="campo-senha">
+    <input id="senha-acesso" name="password" type="password" autocomplete="current-password" placeholder="Senha" required>
+    <button
+        class="alternar-visibilidade-senha"
+        type="button"
+        data-password-target="senha-acesso"
+        aria-label="Mostrar senha"
+        aria-pressed="false"
+        title="Mostrar senha"
+    >
+        <span class="icone-visibilidade-senha" aria-hidden="true"><svg class="lucide lucide-eye" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"></path><circle cx="12" cy="12" r="3"></circle></svg></span>
+    </button>
+</div>
+                    <button id="botao-entrar" class="btn-proxima btn-entrar" type="submit" disabled>Entrar</button>
+                    <button id="alternar-modo-acesso" class="btn-secundario" type="button">Criar conta</button>
+                    <p id="mensagem-acesso" class="mensagem-acesso" aria-live="polite"></p>
+                </form>
+            </div>
+        </section>
+
+        <!-- 0.5. Cadastro -->
+        <section id="tela-cadastro" class="tela tela-acesso escondido" aria-labelledby="titulo-cadastro">
+            <button id="alternar-tema-cadastro" class="botao-tema botao-tema-acesso" type="button" aria-label="Ativar modo escuro" aria-pressed="false" title="Modo escuro">
+                <span class="tema-icone" aria-hidden="true"><svg class="lucide lucide-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M20.985 12.486A9 9 0 1 1 11.514 3.015 7 7 0 0 0 20.985 12.486z"></path></svg></span>
+            </button>
+            <div class="acesso-conteudo">
+                <img class="logo-simunus logo-simunus-acesso" src="./assets/simunus-logo-dark.png" data-logo-dark="./assets/simunus-logo-dark.png" data-logo-light="./assets/simunus-logo-light.png" alt="SIMUNUS">
+                <h1 id="titulo-cadastro" class="visually-hidden">Criar conta</h1>
+                <p id="subtitulo-cadastro" class="subtitulo">Crie sua conta SIMUNUS</p>
+                <form id="formulario-cadastro" class="formulario-acesso" novalidate>
+                    <label id="rotulo-email-cadastro" for="email-cadastro">E-mail</label>
+                    <input id="email-cadastro" name="email" type="email" inputmode="email" autocomplete="email" placeholder="seu@email.com" required>
+<label id="rotulo-senha-cadastro" for="senha-cadastro">Senha</label>
+<div class="campo-senha">
+    <input id="senha-cadastro" name="password" type="password" autocomplete="new-password" placeholder="Senha" required>
+    <button
+        class="alternar-visibilidade-senha"
+        type="button"
+        data-password-target="senha-cadastro"
+        aria-label="Mostrar senha"
+        aria-pressed="false"
+        title="Mostrar senha"
+    >
+        <span class="icone-visibilidade-senha" aria-hidden="true"><svg class="lucide lucide-eye" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"></path><circle cx="12" cy="12" r="3"></circle></svg></span>
+    </button>
+</div>
+
+<label id="rotulo-confirmar-senha-cadastro" for="confirmar-senha-cadastro">Confirmar senha</label>
+<div class="campo-senha">
+    <input id="confirmar-senha-cadastro" name="confirmPassword" type="password" autocomplete="new-password" placeholder="Confirmar senha" required aria-describedby="mensagem-confirmar-senha">
+    <button
+        class="alternar-visibilidade-senha"
+        type="button"
+        data-password-target="confirmar-senha-cadastro"
+        aria-label="Mostrar senha"
+        aria-pressed="false"
+        title="Mostrar senha"
+    >
+        <span class="icone-visibilidade-senha" aria-hidden="true"><svg class="lucide lucide-eye" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"></path><circle cx="12" cy="12" r="3"></circle></svg></span>
+    </button>
+</div>
+                    <p id="mensagem-confirmar-senha" class="mensagem-campo" aria-live="polite"></p>
+                    <button id="botao-criar-conta" class="btn-proxima btn-entrar" type="submit">Criar conta</button>
+                    <button id="voltar-login-cadastro" class="btn-secundario" type="button">Já tenho uma conta - Entrar</button>
+                    <p id="mensagem-cadastro" class="mensagem-acesso" aria-live="polite"></p>
+                </form>
+            </div>
+        </section>
+
+        <!-- 1. Idioma -->
+        <section id="tela-idioma" class="tela tela-idioma escondido" aria-labelledby="titulo-idioma">
+            <div class="acoes-superiores">
+            <button id="alternar-tema-idioma" class="botao-tema" type="button" aria-label="Alternar modo de tema" aria-pressed="false" title="Modo escuro">
+                <span class="tema-icone" aria-hidden="true"><svg class="lucide lucide-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M20.985 12.486A9 9 0 1 1 11.514 3.015 7 7 0 0 0 20.985 12.486z"></path></svg></span>
+            </button>
+            <button id="abrir-configuracoes" class="botao-configuracoes" type="button" aria-label="Abrir configurações" title="Configurações">
+                <span aria-hidden="true"><svg class="lucide lucide-settings" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg></span>
+            </button>
+            </div>
+            <img class="logo-simunus logo-simunus-idioma" src="./assets/simunus-logo-dark.png" data-logo-dark="./assets/simunus-logo-dark.png" data-logo-light="./assets/simunus-logo-light.png" alt="SIMUNUS">
+            <h1 id="titulo-idioma" class="visually-hidden">SIMUNUS</h1>
+            <p id="subtitulo-idioma" class="subtitulo visually-hidden">Medical study platform</p>
+            <h2 id="pergunta-idioma">Escolha o idioma / Elige el idioma</h2>
+            <div class="selecao-botoes idiomas" role="group" aria-label="Seleção de idioma">
+                <button class="botao-selecao botao-idioma" type="button" data-idioma="pt">🇧🇷 Português</button>
+                <button class="botao-selecao botao-idioma" type="button" data-idioma="es">🇪🇸 Español</button>
+                <button class="botao-selecao botao-idioma" type="button" data-idioma="en">🇺🇸 English</button>
+            </div>
+        </section>
+
+        <!-- 1.25. Solicitar acesso — sem navegação de retorno -->
+        <section id="tela-acesso-pendente" class="tela tela-acesso-pendente escondido" aria-labelledby="titulo-acesso-pendente">
+            <img class="logo-simunus logo-simunus-pendente" src="./assets/simunus-logo-dark.png" data-logo-dark="./assets/simunus-logo-dark.png" data-logo-light="./assets/simunus-logo-light.png" alt="SIMUNUS">
+            <div class="acesso-pendente-icone" aria-hidden="true"><svg class="lucide lucide-lock-keyhole" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="16" r="1"/><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+            <h1 id="titulo-acesso-pendente">Solicitar acesso</h1>
+            <p id="texto-acesso-pendente">Sua conta foi criada! Entre em contato com nossa equipe pelo WhatsApp para solicitar a ativação do acesso aos simulados.</p>
+            <p id="observacao-acesso-pendente" class="observacao-acesso-pendente">Nossa equipe orientará você sobre os planos e as formas de pagamento.</p>
+            <a id="botao-whatsapp-suporte" class="btn-proxima btn-whatsapp-suporte" aria-disabled="true" tabindex="-1" target="_blank" rel="noopener noreferrer"><svg class="lucide lucide-message-circle" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg><span id="texto-botao-whatsapp-suporte">Entrar em contato com o suporte</span><svg class="lucide lucide-arrow-up-right" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
+            <button type="button" id="verificar-acesso" class="btn-verificar-acesso">Verificar acesso</button>
+            <p id="mensagem-verificacao-acesso" class="mensagem-verificacao" role="status" aria-live="polite"></p>
+        </section>
+
+        <!-- 1.30. Renovar plano — sem navegação de retorno -->
+        <section id="tela-renovar-plano" class="tela tela-renovar-plano escondido" aria-labelledby="titulo-renovar-plano">
+            <img class="logo-simunus logo-simunus-pendente" src="./assets/simunus-logo-dark.png" data-logo-dark="./assets/simunus-logo-dark.png" data-logo-light="./assets/simunus-logo-light.png" alt="SIMUNUS">
+            <div class="acesso-pendente-icone" aria-hidden="true"><svg class="lucide lucide-lock-keyhole" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="16" r="1"/><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+            <h1 id="titulo-renovar-plano">Renovar plano</h1>
+            <p id="texto-renovar-plano">Seu plano terminou. Entre em contato pelo WhatsApp para renovar seu acesso aos simulados.</p>
+            <p id="observacao-renovar-plano" class="observacao-renovar-plano">Seu progresso continuará salvo enquanto você renova o acesso.</p>
+            <a id="botao-whatsapp-renovacao" class="btn-proxima btn-whatsapp-suporte" aria-disabled="true" tabindex="-1" target="_blank" rel="noopener noreferrer"><svg class="lucide lucide-message-circle" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg><span id="texto-botao-whatsapp-renovacao">Entrar em contato com o suporte</span><svg class="lucide lucide-arrow-up-right" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
+            <button type="button" id="verificar-renovacao" class="btn-verificar-acesso">Verificar acesso</button>
+            <p id="mensagem-verificacao-renovacao" class="mensagem-verificacao" role="status" aria-live="polite"></p>
+        </section>
+
+        <!-- 1.5. Boas-vindas -->
+        <section id="tela-boas-vindas" class="tela tela-boas-vindas escondido" aria-labelledby="titulo-boas-vindas">
+            <div class="acoes-superiores">
+                <button id="alternar-tema-boas" class="botao-tema" type="button" aria-label="Alternar modo de tema" aria-pressed="false" title="Modo escuro">
+                    <span class="tema-icone" aria-hidden="true"><svg class="lucide lucide-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M20.985 12.486A9 9 0 1 1 11.514 3.015 7 7 0 0 0 20.985 12.486z"></path></svg></span>
+                </button>
+                <button id="abrir-configuracoes-boas" class="botao-configuracoes" type="button" aria-label="Abrir configurações" title="Configurações">
+                    <span aria-hidden="true"><svg class="lucide lucide-settings" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg></span>
+                </button>
+            </div>
+            <img class="logo-simunus logo-simunus-boas" src="./assets/simunus-logo-dark.png" data-logo-dark="./assets/simunus-logo-dark.png" data-logo-light="./assets/simunus-logo-light.png" alt="SIMUNUS">
+            <h1 id="titulo-boas-vindas">Bem-vindo à SIMUNUS</h1>
+            <p id="subtitulo-boas-vindas">A sua plataforma de estudo</p>
+            <button id="botao-materias-boas" class="btn-proxima btn-materias-boas" type="button">MATÉRIAS</button>
+        </section>
+
+        <!-- Dashboard de estudo: dados reais persistidos localmente por usuário. -->
+        <section id="tela-dashboard" class="tela tela-selecao tela-dashboard escondido" aria-labelledby="titulo-dashboard">
+            <div class="dashboard-head">
+                <div><button id="dashboard-voltar-boas" class="btn-secundario navegacao-voltar-superior" type="button" aria-label="Voltar" title="Voltar"><svg class="lucide lucide-arrow-left" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></button><img class="logo-simunus logo-simunus-dashboard" src="./assets/simunus-logo-dark.png" data-logo-dark="./assets/simunus-logo-dark.png" data-logo-light="./assets/simunus-logo-light.png" alt="SIMUNUS"><h1 id="titulo-dashboard">Seu estudo, em continuidade</h1><p class="dashboard-subtitulo">Acompanhe seu progresso e retome de onde parou.</p></div>
+                <div class="dashboard-controles-globais" aria-label="Controles globais">
+                    <button id="dashboard-tema" class="botao-tema dashboard-tema" type="button" aria-label="Alternar modo de tema" aria-pressed="false" title="Modo escuro">
+                        <span class="tema-icone" aria-hidden="true"></span>
+                    </button>
+                    <button id="dashboard-configuracoes" class="botao-configuracoes" type="button" aria-label="Abrir configurações" title="Configurações">
+                        <span aria-hidden="true"><svg class="lucide lucide-settings" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg></span>
+                    </button>
+                </div>
+            </div>
+            <section class="dashboard-continue" aria-labelledby="titulo-continuar">
+                <div class="dashboard-continue-copy"><span class="dashboard-kicker">PRÓXIMO PASSO</span><h2 id="titulo-continuar">Comece seu primeiro estudo</h2><p id="descricao-continuar">Escolha uma matéria para começar a construir seu histórico.</p></div>
+                <div class="dashboard-continue-actions">
+                    <button id="botao-continuar" class="btn-proxima" type="button" hidden>Escolher matéria</button>
+                    <button id="dashboard-explorar-materias" class="btn-proxima" type="button">Explorar Matérias</button><button id="dashboard-suas-fases" class="btn-proxima" type="button">Minhas Fases</button>
+                </div>
+            </section>
+            <section class="dashboard-section" aria-labelledby="titulo-resumo"><div class="dashboard-section-head"><h2 id="titulo-resumo">Seu desempenho</h2><span>Resumo geral</span></div>
+                <div class="dashboard-stats" id="dashboard-stats">
+                    <article class="dashboard-stat"><span>Questões respondidas</span><strong id="stat-respondidas">0</strong></article>
+                    <article class="dashboard-stat"><span>Acertos</span><strong id="stat-acertos">0</strong></article>
+                    <article class="dashboard-stat"><span>Aproveitamento</span><strong id="stat-aproveitamento">0%</strong></article>
+                    <article class="dashboard-stat"><span>Matérias estudadas</span><strong id="stat-materias">0</strong></article>
+                </div>
+            </section>
+            <section class="dashboard-section dashboard-review" aria-labelledby="titulo-revisao">
+                <button id="abrir-modo-revisao" class="dashboard-review-toggle" type="button" aria-expanded="false" aria-controls="conteudo-modo-revisao">
+                    <span class="review-heading-group"><span class="review-heading-icon" aria-hidden="true"><svg width="31" height="31" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7.5c-2.7-1.8-5.5-2-9-1v13c3.5-1 6.3-.8 9 1 2.7-1.8 5.5-2 9-1v-13c-3.5-1-6.3-.8-9 1Z"/><path d="M12 7.5v13"/></svg></span><span class="dashboard-review-toggle-copy"><strong id="titulo-revisao">Modo Revisão</strong><span id="descricao-revisao">Revise questões importantes.</span></span></span>
+                    <span class="dashboard-review-toggle-meta"><svg class="lucide lucide-chevron-down" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"></path></svg></span>
+                </button>
+                <div id="conteudo-modo-revisao" class="dashboard-review-content" hidden>
+                    <div id="opcoes-revisao" class="opcoes-revisao">
+                    <button type="button" data-review-mode="wrong"><svg class="lucide lucide-circle-alert" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg><span class="review-card-body"><strong class="review-card-count" data-review-count="wrong">—</strong><span class="review-card-label">Questões Erradas</span><small data-review-hint="wrong"></small></span></button>
+                    <button type="button" data-review-mode="bookmarked"><svg class="lucide lucide-bookmark" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg><span class="review-card-body"><strong class="review-card-count" data-review-count="bookmarked">—</strong><span class="review-card-label">Questões Salvas</span><small data-review-hint="bookmarked"></small></span></button>
+                    <button type="button" data-review-mode="recent"><svg class="lucide lucide-history" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5"></path><path d="M12 7v5l4 2"></path></svg><span class="review-card-body"><strong class="review-card-count" data-review-count="recent">—</strong><span class="review-card-label">Últimas Feitas</span><small data-review-hint="recent"></small></span></button>
+                    </div>
+                    <div id="selecao-quantidade-revisao" class="review-quantity" hidden>
+                        <div class="review-quantity-heading-icon" aria-hidden="true"><svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/><circle cx="9" cy="7" r="2" fill="var(--surface)"/><circle cx="16" cy="12" r="2" fill="var(--surface)"/><circle cx="11" cy="17" r="2" fill="var(--surface)"/></svg></div>
+                        <label id="rotulo-quantidade-revisao" for="quantidade-revisao">Quantidade de Questões</label>
+                        <select id="quantidade-revisao">
+                            <option value="fixed:10">10</option>
+                            <option value="fixed:20">20</option>
+                            <option value="fixed:50">50</option>
+                            <option value="fixed:100">100</option>
+                            <option value="custom">Personalizada</option>
+                            <option value="all">Todas disponíveis</option>
+                        </select>
+                        <div class="review-custom-stepper" id="review-custom-stepper" hidden><button type="button" id="review-minus" aria-label="Diminuir">−</button><input id="quantidade-revisao-personalizada" type="number" min="1" max="100" step="1" value="1" aria-label="Quantidade personalizada"><button type="button" id="review-plus" aria-label="Aumentar">+</button></div><p class="review-limit" id="review-limit" aria-live="polite"></p>
+                        <button id="iniciar-revisao-supabase" type="button" class="btn-proxima">Iniciar Revisão</button>
+                    </div>
+                    <p id="mensagem-revisao" class="dashboard-feedback" aria-live="polite"></p>
+                </div>
+            </section>
+            <section class="dashboard-section" aria-labelledby="titulo-evolucao"><div class="dashboard-section-head"><h2 id="titulo-evolucao">Evolução</h2><span>Últimas sessões</span><button id="compartilhar-evolucao" class="btn-secundario btn-compartilhar-evolucao" type="button"><svg class="lucide lucide-share-2" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg><span>Compartilhar Evolução</span></button></div><div id="dashboard-historico" class="dashboard-historico"><p>Continue estudando para acompanhar sua evolução.</p></div></section>
+        </section>
+
+        <!-- Configurações -->
+        <section id="tela-configuracoes" class="tela tela-selecao tela-configuracoes escondido" aria-labelledby="titulo-configuracoes">
+            <div class="cabecalho-selecao cabecalho-configuracoes">
+                <img class="logo-simunus logo-simunus-config" src="./assets/simunus-logo-dark.png" data-logo-dark="./assets/simunus-logo-dark.png" data-logo-light="./assets/simunus-logo-light.png" alt="SIMUNUS">
+                <h1 id="titulo-configuracoes">Configurações</h1>
+                <p id="subtitulo-configuracoes">Personalize a aparência do aplicativo.</p>
+            </div>
+            <div class="configuracoes-lista">
+                <button id="voltar-configuracoes" class="btn-secundario navegacao-voltar-superior" type="button" aria-label="Voltar" title="Voltar"><svg class="lucide lucide-arrow-left" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></button>
+                <div class="configuracao-item">
+                    <div class="configuracao-texto">
+                        <strong id="rotulo-aparencia">Aparência</strong>
+                        <span id="descricao-aparencia">Escolha o modo de visualização.</span>
+                    </div>
+                    <button id="alternar-tema-config" class="botao-config-opcao" type="button"></button>
+                </div>
+                <div class="configuracao-item configuracao-fonte">
+                    <div class="configuracao-texto">
+                        <strong id="rotulo-fonte">Tamanho da Fonte</strong>
+                        <span id="descricao-fonte">Ajuste a leitura para seu conforto.</span>
+                    </div>
+                    <div class="controle-fonte-slider">
+                        <span class="fonte-indicador" aria-hidden="true">A</span>
+                        <input id="slider-fonte" class="slider-fonte" type="range" min="0.85" max="1.30" step="0.01" value="1" aria-label="Tamanho da Fonte">
+                        <span class="fonte-indicador fonte-indicador-grande" aria-hidden="true">A</span>
+                    </div>
+                </div>
+                <div class="configuracao-item configuracao-idioma">
+                    <div class="configuracao-texto">
+                        <strong id="rotulo-idioma-config">Idioma</strong>
+                        <span id="descricao-idioma-config">Idioma atualmente selecionado.</span>
+                    </div>
+                    <div class="configuracao-idiomas" role="group" aria-label="Idioma">
+                        <button type="button" class="botao-idioma-config" data-config-idioma="pt">Português</button>
+                        <button type="button" class="botao-idioma-config" data-config-idioma="es">Español</button>
+                        <button type="button" class="botao-idioma-config" data-config-idioma="en">English</button>
+                    </div>
+                </div>
+            </div>
+            <button id="sair-conta" class="btn-secundario btn-sair" type="button">Sair</button>
+        </section>
+
+        <!-- 2. Matéria -->
+        <section id="tela-materias" class="tela tela-selecao escondido" aria-labelledby="titulo-materias">
+            <button id="voltar-idioma" class="btn-secundario navegacao-voltar-superior" type="button" aria-label="Voltar" title="Voltar"><svg class="lucide lucide-arrow-left" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></button>
+            <button id="alternar-tema-materias" class="botao-tema" type="button" aria-label="Alternar modo de tema" aria-pressed="false" title="Modo escuro">
+                <span class="tema-icone" aria-hidden="true"><svg class="lucide lucide-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M20.985 12.486A9 9 0 1 1 11.514 3.015 7 7 0 0 0 20.985 12.486z"></path></svg></span>
+            </button>
+            <div class="selecao-logo-wrap">
+                <img class="logo-simunus logo-simunus-selecao" src="./assets/simunus-logo-dark.png" data-logo-dark="./assets/simunus-logo-dark.png" data-logo-light="./assets/simunus-logo-light.png" alt="SIMUNUS">
+            </div>
+            <div class="cabecalho-selecao">
+                <h1 id="titulo-materias">Selecione a Matéria</h1>
+                <p id="subtitulo-materias">Escolha a matéria que deseja estudar.</p>
+            </div>
+            <div class="pesquisa-fases-wrap pesquisa-materias-wrap">
+                <button id="abrir-pesquisa-materias" class="botao-pesquisa" type="button" aria-label="Pesquisar matérias" aria-expanded="false" title="Pesquisar">
+                    <svg class="lucide lucide-search" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+                </button>
+                <div id="pesquisa-materias" class="pesquisa-fases" hidden aria-hidden="true">
+                    <label class="visually-hidden" for="campo-pesquisa-materias">Pesquisar</label>
+                    <input id="campo-pesquisa-materias" type="search" autocomplete="off" placeholder="Pesquisar...">
+                    <button id="fechar-pesquisa-materias" class="botao-fechar-pesquisa" type="button" aria-label="Fechar pesquisa">
+                        <svg class="lucide lucide-x" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <div id="acao-criar-simulado" class="lista-selecao" role="group" aria-label="Simulado personalizado" hidden>
+                <button id="abrir-criar-simulado" class="botao-selecao botao-fase" type="button">
+                    <span class="fase-numero">+ Criar Simulado</span>
+                    <span class="fase-tema">Monte um simulado personalizado</span>
+                </button>
+            </div>
+            <div id="lista-materias" class="lista-selecao" role="group" aria-label="Matérias"></div>
+            <p id="mensagem-materias" class="mensagem-fases" aria-live="polite"></p>
+            <button id="abrir-dashboard-materias" class="btn-secundario btn-voltar-dashboard" type="button" aria-label="Voltar" title="Voltar"><svg class="lucide lucide-arrow-left" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></button>
+            <div class="suas-fases-wrap">
+                <button id="abrir-suas-fases" class="botao-suas-fases" type="button" aria-expanded="false">
+                    <span aria-hidden="true"><svg class="lucide lucide-sparkles" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="m12 3-1.5 4.5L6 9l4.5 1.5L12 15l1.5-4.5L18 9l-4.5-1.5L12 3Z"></path><path d="m19 14-.75 2.25L16 17l2.25.75L19 20l.75-2.25L22 17l-2.25-.75L19 14Z"></path></svg></span><span id="texto-suas-fases">Minhas Fases</span><span class="suas-fases-seta" aria-hidden="true"><svg class="lucide lucide-arrow-right" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></span>
+                </button>
+            </div>
+        </section>
+
+        <!-- 2.5. Suas Fases -->
+        <section id="tela-suas-fases" class="tela tela-selecao escondido tela-suas-fases" aria-labelledby="titulo-suas-fases">
+            <button id="voltar-suas-fases" class="btn-secundario suas-fases-voltar navegacao-voltar-superior" type="button" aria-label="Voltar" title="Voltar"><svg class="lucide lucide-arrow-left" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></button>
+            <div class="cabecalho-selecao">
+                <div class="icone-selecao" aria-hidden="true"><svg class="lucide lucide-sparkles" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="m12 3-1.5 4.5L6 9l4.5 1.5L12 15l1.5-4.5L18 9l-4.5-1.5L12 3Z"></path><path d="m19 14-.75 2.25L16 17l2.25.75L19 20l.75-2.25L22 17l-2.25-.75L19 14Z"></path><path d="m5 14-.5 1.5L3 16l1.5.5L5 18l.5-1.5L7 16l-1.5-.5L5 14Z"></path></svg></div>
+                <h1 id="titulo-suas-fases">Minhas Fases</h1>
+                <p id="subtitulo-suas-fases">Crie, organize e estude suas fases personalizadas.</p>
+            </div>
+            <div class="suas-fases-opcoes" role="group" aria-label="Minhas Fases">
+                <button type="button" class="suas-fases-card" data-custom-screen-action="list"><span class="suas-fases-card-icon" aria-hidden="true"><svg class="lucide lucide-play-circle" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg></span><span><strong id="tela-acao-lista">Resolver Minhas Fases</strong><small id="tela-acao-lista-desc">Veja e abra as fases que você criou.</small></span><span class="suas-fases-card-arrow" aria-hidden="true"><svg class="lucide lucide-arrow-right" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></span></button>
+                <button type="button" class="suas-fases-card" data-custom-screen-action="create"><span class="suas-fases-card-icon" aria-hidden="true"><svg class="lucide lucide-plus" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg></span><span><strong id="tela-acao-criar">Criar Nova Fase</strong><small id="tela-acao-criar-desc">Monte uma nova fase com suas próprias questões.</small></span><span class="suas-fases-card-arrow" aria-hidden="true"><svg class="lucide lucide-arrow-right" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></span></button>
+                <button type="button" class="suas-fases-card" data-custom-screen-action="archived"><span class="suas-fases-card-icon" aria-hidden="true"><svg class="lucide lucide-archive" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v12h14V8"/><path d="M10 12h4"/></svg></span><span><strong id="tela-acao-arquivadas">Arquivadas</strong><small id="tela-acao-arquivadas-desc">Consulte e restaure fases arquivadas.</small></span><span class="suas-fases-card-arrow" aria-hidden="true"><svg class="lucide lucide-arrow-right" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></span></button>
+            </div>
+        </section>
+
+        <!-- Lista de fases personalizadas -->
+        <section id="tela-lista-fases-custom" class="tela tela-selecao escondido" aria-labelledby="titulo-lista-fases-custom">
+            <div class="custom-library-topbar">
+                <button id="voltar-lista-fases-custom" class="btn-secundario navegacao-voltar-superior" type="button" aria-label="Voltar" title="Voltar"><svg class="lucide lucide-arrow-left" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></button>
+                <div class="custom-screen-actions custom-screen-actions-top"><button id="custom-screen-create" class="btn-proxima" type="button"><svg class="lucide lucide-plus" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg><span>Criar Nova Fase</span></button></div>
+            </div>
+            <div class="cabecalho-selecao">
+                <div class="icone-selecao" aria-hidden="true"><svg class="lucide lucide-book-open" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M2 4v16a2 2 0 0 0 2 2h16"></path><path d="M22 18V4a2 2 0 0 0-2-2h-9a3 3 0 0 0-3 3v15"></path><path d="M22 18a2 2 0 0 0-2-2h-9a3 3 0 0 0-3 3"></path></svg></div>
+                <h1 id="titulo-lista-fases-custom">Minhas Fases</h1>
+                <p id="subtitulo-lista-fases-custom"></p>
+            </div>
+            <div class="custom-library-tools" id="custom-library-tools">
+                <label class="custom-library-search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input id="custom-library-search" type="search" placeholder="Pesquisar fases..." autocomplete="off" aria-label="Pesquisar fases"></label>
+                <div class="custom-library-controls"><div class="custom-library-filters" role="group" aria-label="Filtrar fases"><button type="button" class="is-active" data-library-filter="todas">Todas</button><button type="button" data-library-filter="favoritas">☆ Favoritas</button></div>
+                    <label class="custom-library-order-label"><span>Ordenar por</span><select id="custom-library-order" aria-label="Ordenar fases"><option value="recent">Mais recentes</option><option value="oldest">Mais antigas</option><option value="az">Nome: A–Z</option><option value="za">Nome: Z–A</option><option value="most">Mais questões</option><option value="least">Menos questões</option></select></label></div>
+                <div id="custom-library-count" class="custom-library-count" aria-live="polite"></div>
+            </div>
+            <div id="custom-screen-list" class="custom-manage-list"></div>
+            <div id="custom-screen-empty" class="custom-empty" hidden></div>
+        </section>
+
+        <!-- 3. Fase -->
+        <section id="tela-fases" class="tela tela-selecao escondido" aria-labelledby="titulo-fases">
+            <button id="voltar-materias" class="btn-secundario navegacao-voltar-superior" type="button" aria-label="Voltar" title="Voltar"><svg class="lucide lucide-arrow-left" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></button>
+            <button id="alternar-tema-fases" class="botao-tema" type="button" aria-label="Alternar modo de tema" aria-pressed="false" title="Modo escuro">
+                <span class="tema-icone" aria-hidden="true"><svg class="lucide lucide-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M20.985 12.486A9 9 0 1 1 11.514 3.015 7 7 0 0 0 20.985 12.486z"></path></svg></span>
+            </button>
+            <div class="selecao-logo-wrap">
+                <img class="logo-simunus logo-simunus-selecao" src="./assets/simunus-logo-dark.png" data-logo-dark="./assets/simunus-logo-dark.png" data-logo-light="./assets/simunus-logo-light.png" alt="SIMUNUS">
+            </div>
+            <div class="cabecalho-selecao">
+                <div id="icone-fases" class="icone-selecao" aria-hidden="true"><svg class="lucide lucide-book-open" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M2 4v16a2 2 0 0 0 2 2h16"></path><path d="M22 18V4a2 2 0 0 0-2-2h-9a3 3 0 0 0-3 3v15"></path><path d="M22 18a2 2 0 0 0-2-2h-9a3 3 0 0 0-3 3"></path></svg></div>
+                <h1 id="titulo-fases">Selecione a Fase</h1>
+                <p id="subtitulo-fases">Escolha a fase que deseja estudar.</p>
+            </div>
+            <div class="pesquisa-fases-wrap">
+                <button id="abrir-pesquisa-fases" class="botao-pesquisa" type="button" aria-label="Pesquisar fases" aria-expanded="false" title="Pesquisar">
+                    <svg class="lucide lucide-search" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+                </button>
+                <div id="pesquisa-fases" class="pesquisa-fases" hidden aria-hidden="true">
+                    <label class="visually-hidden" for="campo-pesquisa-fases">Pesquisar</label>
+                    <input id="campo-pesquisa-fases" type="search" autocomplete="off" placeholder="Pesquisar...">
+                    <button id="fechar-pesquisa-fases" class="botao-fechar-pesquisa" type="button" aria-label="Fechar pesquisa">
+                        <svg class="lucide lucide-x" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <div id="lista-fases" class="lista-selecao" role="group" aria-label="Fases"></div>
+            <p id="mensagem-fases" class="mensagem-fases" aria-live="polite"></p>
+            <button id="abrir-dashboard-fases" class="btn-secundario btn-voltar-dashboard" type="button" aria-label="Voltar" title="Voltar"><svg class="lucide lucide-arrow-left" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></button>
+        </section>
+
+        <!-- Simulado personalizado — estrutura HTML; integração em etapa posterior -->
+        <section id="tela-criar-simulado" class="tela tela-selecao escondido" aria-labelledby="titulo-criar-simulado">
+            <button id="voltar-criar-simulado" class="btn-secundario navegacao-voltar-superior" type="button" aria-label="Voltar" title="Voltar">
+                <svg class="lucide lucide-arrow-left" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
+            </button>
+
+            <div class="selecao-logo-wrap">
+                <img class="logo-simunus logo-simunus-selecao" src="./assets/simunus-logo-dark.png" data-logo-dark="./assets/simunus-logo-dark.png" data-logo-light="./assets/simunus-logo-light.png" alt="SIMUNUS">
+            </div>
+
+            <div class="cabecalho-selecao">
+                <h1 id="titulo-criar-simulado">Criar Simulado</h1>
+                <p id="subtitulo-criar-simulado">Personalize seu simulado</p>
+            </div>
+
+            <form id="form-criar-simulado" class="formulario-criar-simulado">
+                <div class="campo-simulado-personalizado">
+                    <label for="criar-simulado-area">Área</label>
+                    <select id="criar-simulado-area" name="area">
+                        <option value="">Selecione uma área</option>
+                    </select>
+                </div>
+
+                <div class="campo-simulado-personalizado">
+                    <label for="criar-simulado-especialidade">Especialidade</label>
+                    <select id="criar-simulado-especialidade" name="specialty" disabled>
+                        <option value="">Selecione uma especialidade</option>
+                    </select>
+                </div>
+
+                <fieldset id="criar-simulado-temas" class="grupo-criar-simulado grupo-temas-criar-simulado">
+                    <legend>Temas</legend>
+                    <div id="lista-temas-criar-simulado" role="group" aria-label="Temas"></div>
+                </fieldset>
+
+                <fieldset id="criar-simulado-quantidade" class="grupo-criar-simulado opcoes-quantidade-criar-simulado">
+                    <legend>Quantidade de questões</legend>
+                    <label><input type="radio" name="question-count" value="10" disabled> <span>10</span></label>
+                    <label><input type="radio" name="question-count" value="20" disabled> <span>20</span></label>
+                    <label><input type="radio" name="question-count" value="30" disabled> <span>30</span></label>
+                    <label><input type="radio" name="question-count" value="50" disabled> <span>50</span></label>
+                </fieldset>
+
+                <fieldset id="criar-simulado-modo" class="grupo-criar-simulado opcoes-modo-criar-simulado">
+                    <legend>Modo</legend>
+                    <label>
+                        <input type="radio" name="simulation-mode" value="immediate_feedback" checked>
+                        <span>Feedback imediato</span>
+                    </label>
+                    <label hidden>
+                        <input type="radio" name="simulation-mode" value="exam" disabled>
+                        <span>Modo prova</span>
+                    </label>
+                </fieldset>
+
+                <button id="iniciar-simulado-personalizado" class="btn-proxima" type="submit" disabled>Iniciar Simulado</button>
+            </form>
+        </section>
+
+        <!-- Editor e gerenciamento de fases personalizadas -->
+        <div id="custom-phases-layer" class="custom-phases-layer" hidden></div>
+
+        <!-- 4. Questionário -->
+        <section id="tela-jogo" class="tela escondido" aria-labelledby="titulo-jogo">
+            <header class="cabecalho cabecalho-jogo">
+                <button id="voltar-fases" class="btn-secundario btn-voltar-fases navegacao-voltar-superior" type="button" aria-label="Voltar" title="Voltar"><svg class="lucide lucide-arrow-left" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></button>
+                <img class="logo-simunus logo-simunus-jogo" src="./assets/simunus-logo-dark.png" data-logo-dark="./assets/simunus-logo-dark.png" data-logo-light="./assets/simunus-logo-light.png" alt="SIMUNUS">
+                <div class="cabecalho-jogo-texto">
+                    <h1 id="titulo-jogo" class="titulo-jogo-materia">
+                        <span id="nome-materia-jogo">Simulado</span>
+                    </h1>
+                    <p id="subtitulo-jogo">Carregando...</p>
+                </div>
+            </header>
+
+            <section class="status" aria-label="Status do questionário" id="status-questionario">
+                <div><span id="rotulo-questao">Questão</span><strong id="numero-questao">1/1</strong></div>
+                <div><span id="rotulo-pontos">Pontos</span><strong id="pontuacao">0</strong></div>
+                <div id="status-grupo"><span id="rotulo-grupo">Grupo</span><strong id="grupo-atual">—</strong></div>
+            </section>
+
+            <section class="card" aria-live="polite">
+                <div class="identificacao-questao">
+                    <div class="tipo-questao" id="tipo-questao">Questão</div>
+                    <button id="marcar-questao" class="botao-marcar-questao" type="button" aria-label="Salvar questão para revisar" aria-pressed="false" title="Salvar para revisar"><svg class="lucide lucide-bookmark" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 4 12 0a1 1 0 0 1 1 1v16l-7-5-7 5V5a1 1 0 0 1 1-1z"></path></svg></button>
+                    <button id="abrir-relato-questao" class="botao-relato-questao" type="button" aria-label="Relatar problema nesta questão" title="Relatar problema">
+                        <svg class="lucide lucide-circle-alert" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    </button>
+                </div>
+                <div id="imagem-questao" class="imagem-questao" hidden aria-hidden="true"></div>
+                <h2 id="pergunta">Carregando pergunta...</h2>
+                <div id="alternativas" class="alternativas" role="group" aria-label="Alternativas"></div>
+                <div id="feedback" class="feedback vazio" aria-live="polite"></div>
+                <button id="proxima" class="btn-proxima" type="button" disabled>Próxima questão →</button>
+            </section>
+
+            <section id="resultado-final" class="resultado-final escondido" aria-labelledby="titulo-resultado">
+                <h2 id="titulo-resultado">🏆 Simulado finalizado!</h2>
+                <p id="mensagem-final"></p>
+                <div class="nota"><span id="rotulo-pontuacao-final">Sua pontuação</span><strong id="pontuacao-final">0</strong></div>
+                <div class="resumo">
+                    <div><span id="rotulo-acertos-final">Acertos</span><strong id="acertos-final">0</strong></div>
+                    <div><span id="rotulo-erros-final">Erros</span><strong id="erros-final">0</strong></div>
+                    <div><span id="rotulo-aproveitamento-final">Aproveitamento</span><strong id="porcentagem-final">0%</strong></div>
+                </div>
+                <div id="resultado-detalhes" class="resultado-detalhes" aria-live="polite"></div>
+                <div class="resultado-acoes">
+                    <button id="proxima-fase-resultado" class="btn-proxima" type="button">Próxima Fase</button>
+                    <button id="revisar-erros-sessao" class="btn-secundario" type="button">Revisar Erros</button>
+                    <button id="reiniciar" class="btn-secundario btn-reiniciar" type="button"><svg class="lucide lucide-rotate-ccw" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span>Refazer</span></button>
+                    <button id="compartilhar-resultado" class="btn-secundario btn-compartilhar-resultado" type="button"><svg class="lucide lucide-share-2" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.59 13.51 6.83 3.98M15.41 6.51l-6.82 3.98"/></svg><span>Compartilhar Resultado</span></button>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <div id="modal-share-card" class="share-card-backdrop escondido" aria-hidden="true">
+        <section class="share-card-modal" role="dialog" aria-modal="true" aria-labelledby="share-card-title">
+            <header class="share-card-head">
+                <div>
+                    <span class="share-card-kicker">SIMUNUS</span>
+                    <h2 id="share-card-title">Compartilhar progresso</h2>
+                </div>
+                <button id="fechar-share-card" class="custom-fechar" type="button" aria-label="Fechar">×</button>
+            </header>
+
+            <div id="share-card-type-control" class="share-control-group share-type-control">
+                <span id="share-card-type-label">O que compartilhar</span>
+                <div class="share-segmented" role="group" aria-label="Tipo de progresso">
+                    <button type="button" data-share-type="overall">Geral</button>
+                    <button type="button" data-share-type="subject">Por matéria</button>
+                </div>
+                <select id="share-card-subject" aria-label="Escolher matéria" hidden></select>
+            </div>
+
+            <div class="share-card-preview-wrap">
+                <div class="share-card-preview">
+                    <div id="share-card-preview-text" class="share-card-text-preview" role="textbox" aria-readonly="true"></div>
+                </div>
+            </div>
+
+            <div class="share-card-actions">
+                <button id="share-card-native" class="btn-proxima" type="button">Compartilhar progresso</button>
+                <button id="share-card-copy" class="btn-secundario" type="button">Copiar texto</button>
+            </div>
+            <p id="share-card-feedback" class="share-card-feedback" aria-live="polite"></p>
+        </section>
+    </div>
+
+    <div id="modal-relatar-questao" class="relato-backdrop escondido" aria-hidden="true">
+        <section class="relato-modal" role="dialog" aria-modal="true" aria-labelledby="titulo-relato-questao">
+            <header class="relato-modal-head">
+                <div><h2 id="titulo-relato-questao">Relatar problema</h2><p>Questão <strong id="relato-id-questao">—</strong></p></div>
+                <button id="fechar-relato-questao" class="relato-fechar" type="button" aria-label="Fechar">×</button>
+            </header>
+            <form id="form-relato-questao">
+                <label id="relato-prompt" for="texto-relato-questao">Encontrou algum problema nesta questão? Informe abaixo.</label>
+                <textarea id="texto-relato-questao" rows="5" required placeholder="Descreva o problema encontrado nesta questão..."></textarea>
+                <p id="feedback-relato-questao" class="relato-feedback" aria-live="polite"></p>
+                <div class="relato-modal-foot"><button class="btn-proxima" type="submit">Enviar</button></div>
+            </form>
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3" integrity="sha384-dl/4LkSyQ4uEucc48NM6VDZLAjLLq9yMzZ5JLXumBq7Ld33XBof73hseOqPhO89+" crossorigin="anonymous"></script>
+    <script src="./supabase.js"></script>
+    <script src="./simunus-api.js"></script>
+    <script src="./auth.js"></script>
+    <script src="./custom-phases.js"></script>
+    <script src="./password-visibility.js"></script>
+    <script src="./script.js"></script>
+</body>
+</html>
